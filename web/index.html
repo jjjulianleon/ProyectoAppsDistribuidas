@@ -84,7 +84,8 @@
   #toast.err { background: var(--red); color: #fff; }
   #empezar { margin-top: 24px; background: var(--green); color: #000; font-weight: 700; padding: 14px 32px; font-size: 16px; }
   .chip { display: inline-block; font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase;
-          color: var(--green); margin-bottom: 12px; }
+          color: var(--green); margin-bottom: 12px; padding: 4px 10px; border-radius: 999px;
+          background: rgba(0, 0, 0, .6); } /* fondo oscuro: se lee sobre portadas claras */
   @media (max-width: 900px) {
     body { height: auto; overflow: auto; }
     main { grid-template-columns: 1fr; }
@@ -224,7 +225,9 @@ function pintar() {
       <button class="like ${misLikes.has(id) ? "mio" : ""}" data-like="${esc(id)}" aria-label="Me gusta">♥ ${likes[id] || 0}</button></div>`;
   }).join("") : `<p class="vacio">Nada en cola. Usa + en la biblioteca.</p>`);
   $("empezar").hidden = !(PARLANTE && !activo);
-  $("pausa").hidden = !s || (PARLANTE && !activo);
+  // La pausa es para todos (replicada): el parlante puede pausar aunque
+  // todavía no haya presionado "Empezar a sonar".
+  $("pausa").hidden = !s;
   iconoPausa();
 }
 
@@ -290,7 +293,11 @@ document.addEventListener("click", e => {
   else if (b.dataset.like) like(b.dataset.like);
   else if (b.id === "saltar") saltar();
   else if (b.id === "pausa") pausarOReanudar();
-  else if (b.id === "empezar") { activo = true; sonando = null; refrescar(); }
+  else if (b.id === "empezar") {
+    // "Empezar a sonar" significa que suene: si la cola estaba en pausa, reanuda para todos.
+    activo = true; sonando = null;
+    pausado ? pausarOReanudar().then(refrescar) : refrescar();
+  }
 });
 // El ícono sigue el estado replicado: ⏸ mientras suena, ▶ en pausa.
 const ICONO = {
