@@ -1,0 +1,21 @@
+{"id": "c1-4a4d1440", "client": "c1", "op": "agregar", "args": {"cancion": "c1"}, "invoke": 1795239359.394457, "complete": 1795239359.397381, "ok": true, "result": 0, "error": null, "node": "n1"}
+{"id": "c1-147c9dbf", "client": "c1", "op": "agregar", "args": {"cancion": "c2"}, "invoke": 1795239359.397567, "complete": 1795239359.4006479, "ok": true, "result": 1, "error": null, "node": "n1"}
+{"id": "c1-dfa60cce", "client": "c1", "op": "agregar", "args": {"cancion": "c3"}, "invoke": 1795239359.4008892, "complete": 1795239359.403601, "ok": true, "result": 2, "error": null, "node": "n1"}
+{"id": "c1-4a2c8639", "client": "c1", "op": "agregar", "args": {"cancion": "c4"}, "invoke": 1795239359.403745, "complete": 1795239359.406073, "ok": true, "result": 3, "error": null, "node": "n1"}
+{"id": "c1-faab0454", "client": "c1", "op": "ver_cola", "args": {}, "invoke": 1795239359.406187, "complete": 1795239359.409088, "ok": true, "result": {"cola": ["c1", "c2", "c3", "c4"], "actual": 0, "pausado": false}, "error": null, "node": "n1"}
+{"id": "c2-9bf6914e", "client": "c2", "op": "saltar", "args": {"pos": 0}, "invoke": 1795239359.409695, "complete": 1795239359.413684, "ok": true, "result": true, "error": null, "node": "n1"}
+{"id": "c3-668812bd", "client": "c3", "op": "saltar", "args": {"pos": 0}, "invoke": 1795239359.4097931, "complete": 1795239359.414429, "ok": true, "result": false, "error": null, "node": "n1"}
+{"id": "c1-523130c6", "client": "c1", "op": "ver_cola", "args": {}, "invoke": 1795239359.414569, "complete": 1795239359.418306, "ok": true, "result": {"cola": ["c1", "c2", "c3", "c4"], "actual": 1, "pausado": false}, "error": null, "node": "n1"}
+{"id": "c3-ab78c49d", "client": "c3", "op": "pausar", "args": {}, "invoke": 1795239359.418772, "complete": 1795239359.421592, "ok": true, "result": true, "error": null, "node": "n1"}
+{"id": "c2-5014e79f", "client": "c2", "op": "pausar", "args": {}, "invoke": 1795239359.418699, "complete": 1795239359.422467, "ok": true, "result": true, "error": null, "node": "n1"}
+{"id": "c1-2f95ba58", "client": "c1", "op": "ver_cola", "args": {}, "invoke": 1795239359.422627, "complete": 1795239359.426265, "ok": true, "result": {"cola": ["c1", "c2", "c3", "c4"], "actual": 1, "pausado": true}, "error": null, "node": "n1"}
+{"id": "c1-648b1f8c", "client": "c1", "op": "reanudar", "args": {}, "invoke": 1795239359.426403, "complete": 1795239359.431093, "ok": true, "result": false, "error": null, "node": "n1"}
+{"id": "c1-53a9ac52", "client": "c1", "op": "like", "args": {"cancion": "c2", "usuario": "ana"}, "invoke": 1795239359.431253, "complete": 1795239359.4328, "ok": true, "result": "ok", "error": null, "node": "n1"}
+{"id": "c1-15385ec3", "client": "c1", "op": "like", "args": {"cancion": "c2", "usuario": "beto"}, "invoke": 1795239359.432906, "complete": 1795239359.43401, "ok": true, "result": "ok", "error": null, "node": "n2"}
+{"id": "c1-1f03f798", "client": "c1", "op": "like", "args": {"cancion": "c2", "usuario": "ana"}, "invoke": 1795239359.434149, "complete": 1795239359.4352949, "ok": true, "result": "ok", "error": null, "node": "n3"}
+{"id": "c1-664f2629", "client": "c1", "op": "like", "args": {"cancion": "c2", "usuario": "caro"}, "invoke": 1795239359.435385, "complete": 1795239359.4365811, "ok": true, "result": "ok", "error": null, "node": "n3"}
+{"id": "c1-42521a61", "client": "c1", "op": "ver_cola_rapida", "args": {}, "invoke": 1795239359.4367201, "complete": 1795239359.437394, "ok": true, "result": {"cola": ["c1", "c2", "c3", "c4"], "actual": 1, "pausado": true}, "error": null, "node": "n2"}
+{"id": "c1-91fa88ee", "client": "c1", "op": "likes", "args": {"cancion": "c2"}, "invoke": 1795239359.437549, "complete": 1795239359.438196, "ok": true, "result": 1, "error": null, "node": "n1"}
+{"id": "final-n1", "client": "c1", "op": "likes", "args": {"cancion": "c2"}, "final": true, "node": "n1", "invoke": 1795239361.443659, "complete": 1795239361.447007, "ok": true, "result": 3}
+{"id": "final-n2", "client": "c1", "op": "likes", "args": {"cancion": "c2"}, "final": true, "node": "n2", "invoke": 1795239361.447467, "complete": 1795239361.4488971, "ok": true, "result": 3}
+{"id": "final-n3", "client": "c1", "op": "likes", "args": {"cancion": "c2"}, "final": true, "node": "n3", "invoke": 1795239361.449137, "complete": 1795239361.449853, "ok": true, "result": 3}

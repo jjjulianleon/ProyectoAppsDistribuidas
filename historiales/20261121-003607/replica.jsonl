@@ -1,0 +1,9 @@
+{"id": "c1-6e068e37", "client": "c1", "op": "agregar", "args": {"cancion": "c1"}, "invoke": 1795239363.593343, "complete": 1795239363.5963871, "ok": true, "result": 0, "error": null, "node": "n2"}
+{"id": "c1-57842221", "client": "c1", "op": "agregar", "args": {"cancion": "c2"}, "invoke": 1795239363.596812, "complete": 1795239363.599853, "ok": true, "result": 1, "error": null, "node": "n2"}
+{"id": "c1-dc912bcf", "client": "c1", "op": "agregar", "args": {"cancion": "c3"}, "invoke": 1795239363.60006, "complete": 1795239363.808596, "ok": true, "result": 2, "error": null, "node": "n2"}
+{"id": "c1-511a7cdb", "client": "c1", "op": "agregar", "args": {"cancion": "c4"}, "invoke": 1795239363.808897, "complete": 1795239363.811625, "ok": true, "result": 3, "error": null, "node": "n2"}
+{"id": "c1-5f6acd16", "client": "c1", "op": "agregar", "args": {"cancion": "c5"}, "invoke": 1795239363.811862, "complete": 1795239363.814362, "ok": true, "result": 4, "error": null, "node": "n2"}
+{"id": "c1-f6c46f10", "client": "c1", "op": "agregar", "args": {"cancion": "c6"}, "invoke": 1795239363.814497, "complete": 1795239363.817077, "ok": true, "result": 5, "error": null, "node": "n2"}
+{"id": "c1-dbf81cef", "client": "c1", "op": "ver_cola", "args": {}, "invoke": 1795239363.817179, "complete": 1795239363.819139, "ok": true, "result": {"cola": ["c1", "c2", "c3", "c4", "c5", "c6"], "actual": 0, "pausado": false}, "error": null, "node": "n2"}
+{"id": "c1-3eb87e98", "client": "c1", "op": "ver_cola", "args": {}, "invoke": 1795239367.133763, "complete": 1795239367.142088, "ok": true, "result": {"cola": ["c1", "c2", "c3", "c4", "c5", "c6"], "actual": 0, "pausado": false}, "error": null, "node": "n2"}
+{"id": "c1-17732359", "client": "c1", "op": "ver_cola_rapida", "args": {}, "invoke": 1795239367.142259, "complete": 1795239367.142751, "ok": true, "result": {"cola": ["c1", "c2", "c3", "c4", "c5", "c6"], "actual": 0, "pausado": false}, "error": null, "node": "n1"}

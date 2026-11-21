@@ -1,0 +1,10 @@
+{"id": "c1-1b213420", "client": "c1", "op": "agregar", "args": {"cancion": "c1"}, "invoke": 1795239379.116689, "complete": 1795239379.120648, "ok": true, "result": 0, "error": null, "node": "n2"}
+{"id": "c2-f40f53bb", "client": "c2", "op": "agregar", "args": {"cancion": "c2"}, "invoke": 1795239383.433026, "complete": null, "ok": false, "result": null, "error": "TimeoutError", "node": "n2"}
+{"id": "c1-6325b5c0", "client": "c1", "op": "agregar", "args": {"cancion": "c3"}, "invoke": 1795239389.6418822, "complete": 1795239389.649593, "ok": true, "result": 1, "error": null, "node": "n1"}
+{"id": "c1-4924a5fb", "client": "c1", "op": "like", "args": {"cancion": "c1", "usuario": "minoria"}, "invoke": 1795239389.649747, "complete": 1795239389.650808, "ok": true, "result": "ok", "error": null, "node": "n2"}
+{"id": "c1-bfd2a79e", "client": "c1", "op": "like", "args": {"cancion": "c1", "usuario": "mayoria"}, "invoke": 1795239389.650914, "complete": 1795239389.651867, "ok": true, "result": "ok", "error": null, "node": "n1"}
+{"id": "c1-44672df8", "client": "c1", "op": "likes", "args": {"cancion": "c1"}, "invoke": 1795239389.651973, "complete": 1795239389.652478, "ok": true, "result": 1, "error": null, "node": "n2"}
+{"id": "final-n1", "client": "c1", "op": "likes", "args": {"cancion": "c1"}, "final": true, "node": "n1", "invoke": 1795239392.962942, "complete": 1795239392.964809, "ok": true, "result": 2}
+{"id": "final-n2", "client": "c1", "op": "likes", "args": {"cancion": "c1"}, "final": true, "node": "n2", "invoke": 1795239392.965322, "complete": 1795239392.966582, "ok": true, "result": 2}
+{"id": "final-n3", "client": "c1", "op": "likes", "args": {"cancion": "c1"}, "final": true, "node": "n3", "invoke": 1795239392.9668639, "complete": 1795239392.9680262, "ok": true, "result": 2}
+{"id": "c1-83848103", "client": "c1", "op": "ver_cola", "args": {}, "invoke": 1795239392.9684758, "complete": 1795239392.973523, "ok": true, "result": {"cola": ["c1", "c3"], "actual": 0, "pausado": false}, "error": null, "node": "n1"}

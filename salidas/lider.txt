@@ -7,10 +7,10 @@ Convergencia
   (ninguna operación eventual)
 
 Líderes
-  un líder por periodo — cumple (periodo 1: n2, periodo 2: n3)
+  un líder por periodo — cumple (periodo 1: n3, periodo 2: n2)
 
 Costo
-  agregar: 18 ok, 0 sin respuesta, latencia p50 11 ms, p95 1465 ms, mayor tiempo sin respuestas ok 1.8 s
-  ver_cola: 1 ok, 0 sin respuesta, latencia p50 10 ms, p95 10 ms, mayor tiempo sin respuestas ok 0.0 s
+  agregar: 18 ok, 0 sin respuesta, latencia p50 8 ms, p95 2501 ms, mayor tiempo sin respuestas ok 2.8 s
+  ver_cola: 1 ok, 0 sin respuesta, latencia p50 6 ms, p95 6 ms, mayor tiempo sin respuestas ok 0.0 s
 
 Resultado: sin violaciones

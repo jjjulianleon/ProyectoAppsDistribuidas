@@ -16,6 +16,7 @@ Necesitas Python 3.11 o más nuevo. No hay paquetes que instalar. Con Docker
 |---|---|---|---|---|---|
 | `agregar(cancion)` | linearizable | log de Raft + dedup por `request_id` | espera un nuevo líder (~2–3 s) | solo el lado con mayoría acepta | una ronda a la mayoría + fsync |
 | `saltar(pos)` | linearizable con condición (CAS) | log de Raft: solo avanza si la posición actual sigue siendo `pos` | igual que agregar | igual que agregar | igual que agregar |
+| `pausar` / `reanudar` | linearizable | log de Raft; fijan el estado (dos pausas a la vez = pausado) | igual que agregar | igual que agregar | igual que agregar |
 | `ver_cola` | linearizable | la lectura pasa por el log del líder | espera un nuevo líder | el lado con menos réplicas no responde | igual que agregar |
 | `ver_cola_rapida` | eventual | estado aplicado de la réplica local | sigue funcionando | los dos lados responden; el de menos réplicas, atrasado | local, sin mensajes |
 | `like(cancion, usuario)` | eventual (SEC) | G-set + gossip cada 0.5 s | sigue funcionando | los dos lados aceptan; se unen al sanar | local; gossip periódico |

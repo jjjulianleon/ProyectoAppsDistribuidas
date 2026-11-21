@@ -1,15 +1,15 @@
 
-== kill n2 (follower); el líder es n1
-kill n2
+== kill n1 (follower); el líder es n2
+kill n1
 agregar c2 -> 1
 agregar c3 -> 2
 agregar c4 -> 3
 agregar c5 -> 4
 agregar c6 -> 5
-ver_cola -> {'cola': ['c1', 'c2', 'c3', 'c4', 'c5', 'c6'], 'actual': 0}
+ver_cola -> {'cola': ['c1', 'c2', 'c3', 'c4', 'c5', 'c6'], 'actual': 0, 'pausado': False}
 
-== start n2 (vuelve con su disco)
-start n2 
-ver_cola pedida a n2 (redirige al líder) -> {'cola': ['c1', 'c2', 'c3', 'c4', 'c5', 'c6'], 'actual': 0}
-ver_cola_rapida en n2 -> {'cola': ['c1', 'c2', 'c3', 'c4', 'c5', 'c6'], 'actual': 0}
+== start n1 (vuelve con su disco)
+start n1 
+ver_cola pedida a n1 (redirige al líder) -> {'cola': ['c1', 'c2', 'c3', 'c4', 'c5', 'c6'], 'actual': 0, 'pausado': False}
+ver_cola_rapida en n1 -> {'cola': ['c1', 'c2', 'c3', 'c4', 'c5', 'c6'], 'actual': 0, 'pausado': False}
 ¿se puso al día? sí

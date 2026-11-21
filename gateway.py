@@ -22,7 +22,7 @@ from client import Client
 AQUI = Path(__file__).resolve().parent
 WEB = AQUI / "web"
 PUERTO = 8080
-OPS = {"agregar", "saltar", "ver_cola", "ver_cola_rapida", "like", "likes"}
+OPS = {"agregar", "saltar", "pausar", "reanudar", "ver_cola", "ver_cola_rapida", "like", "likes"}
 
 
 def ruta_estatica(path):

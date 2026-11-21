@@ -4,8 +4,9 @@
     python3 scenarios/normal.py
     python3 check.py run/normal.jsonl
 
-Incluye el doble salto: dos clientes presionan "saltar" a la vez sobre la
-misma canción y solo uno salta (compare-and-swap en el log de Raft).
+Incluye el doble salto (dos clientes saltan a la vez sobre la misma canción:
+solo uno salta) y la doble pausa (dos clientes pausan a la vez: queda
+pausado, porque pausar fija el estado en vez de alternarlo).
 """
 import threading
 import time
@@ -35,6 +36,23 @@ for h in hilos:
     h.join()
 print("saltar ->", resultados, "(solo uno debe ser True)")
 print("ver_cola ->", c.call("ver_cola").get("result"))
+
+paso("doble pausa: dos clientes pausan a la vez, después uno reanuda")
+pausas = {}
+
+
+def pausar(nombre):
+    pausas[nombre] = nuevo_cliente(nombre, "normal").call("pausar").get("result")
+
+
+hilos = [threading.Thread(target=pausar, args=(n,)) for n in ("c2", "c3")]
+for h in hilos:
+    h.start()
+for h in hilos:
+    h.join()
+print("pausar ->", pausas, "(los dos True: pausar fija el estado, no lo alterna)")
+print("ver_cola ->", c.call("ver_cola").get("result"))
+print("reanudar ->", c.call("reanudar").get("result"))
 
 paso("likes en réplicas distintas (ana repite)")
 for nodo, usuario in [("n1", "ana"), ("n2", "beto"), ("n3", "ana"), ("n3", "caro")]:

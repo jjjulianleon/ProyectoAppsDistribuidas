@@ -1,13 +1,13 @@
 
-== 3 clientes agregando; el líder es n2
+== 3 clientes agregando; el líder es n3
 
-== kill leader (n2)
-kill n2
-nuevo líder: n3 {'id': 'n3', 'role': 'leader', 'term': 2}
+== kill leader (n3)
+kill n3
+nuevo líder: n2 {'id': 'n2', 'role': 'leader', 'term': 2}
 
-== start n2 (vuelve como follower)
-start n2 
+== start n3 (vuelve como follower)
+start n3 
 confirmadas: 18, en la cola: 18, perdidas: ninguna
 n1 {'id': 'n1', 'role': 'follower', 'term': 2}
-n2 {'id': 'n2', 'role': 'follower', 'term': 2}
-n3 {'id': 'n3', 'role': 'leader', 'term': 2}
+n2 {'id': 'n2', 'role': 'leader', 'term': 2}
+n3 {'id': 'n3', 'role': 'follower', 'term': 2}

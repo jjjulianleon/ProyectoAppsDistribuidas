@@ -1,4 +1,0 @@
-{"id": "c1-b40d843e", "client": "c1", "op": "like", "args": {"cancion": "c9", "usuario": "solo_n3"}, "invoke": 1795238150.981874, "complete": 1795238150.985894, "ok": true, "result": "ok", "error": null, "node": "n3"}
-{"id": "final-n1", "client": "c1", "op": "likes", "args": {"cancion": "c9"}, "final": true, "node": "n1", "invoke": 1795238154.619808, "complete": 1795238154.62528, "ok": true, "result": 0}
-{"id": "final-n2", "client": "c1", "op": "likes", "args": {"cancion": "c9"}, "final": true, "node": "n2", "invoke": 1795238154.6258712, "complete": 1795238154.627163, "ok": true, "result": 0}
-{"id": "final-n3", "client": "c1", "op": "likes", "args": {"cancion": "c9"}, "final": true, "node": "n3", "invoke": 1795238154.6273322, "complete": 1795238154.628445, "ok": true, "result": 0}

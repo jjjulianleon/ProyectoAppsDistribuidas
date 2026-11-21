@@ -2,7 +2,7 @@
 
 Dos mecanismos, uno por tipo de operación:
 
-1. Raft (M20) para agregar, saltar y ver_cola (linearizable). Un líder elegido
+1. Raft (M20) para agregar, saltar, pausar, reanudar y ver_cola (linearizable). Un líder elegido
    por mayoría numera las operaciones en un log. Una entrada tiene commit
    cuando la tiene una mayoría, y cada réplica aplica las entradas con commit,
    en orden, a la máquina de estados de cola.py (M19).
@@ -24,7 +24,7 @@ HEARTBEAT = 0.3        # el líder avisa que sigue vivo (append vacío)
 GOSSIP = 0.5           # cada cuánto se mandan los likes
 MAX_ENTRADAS = 100     # entradas por mensaje de append, para no armar mensajes enormes
 
-RAFT = {"agregar", "saltar", "ver_cola"}
+RAFT = {"agregar", "saltar", "pausar", "reanudar", "ver_cola"}
 
 
 class App(Node):

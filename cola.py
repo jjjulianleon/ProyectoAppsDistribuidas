@@ -11,11 +11,11 @@ def estado_inicial():
     # porque cayó el líder), la misma operación puede quedar dos veces en el
     # log. Con este registro se aplica una sola vez y se devuelve el mismo
     # resultado (deduplicación, M05).
-    return {"cola": [], "pos": 0, "aplicadas": {}}
+    return {"cola": [], "pos": 0, "pausado": False, "aplicadas": {}}
 
 
 def vista(estado):
-    return {"cola": list(estado["cola"]), "actual": estado["pos"]}
+    return {"cola": list(estado["cola"]), "actual": estado["pos"], "pausado": estado["pausado"]}
 
 
 def aplicar(estado, entrada):
@@ -34,6 +34,14 @@ def aplicar(estado, entrada):
         res = args["pos"] == estado["pos"] < len(estado["cola"])
         if res:
             estado["pos"] += 1
+            estado["pausado"] = False  # la canción nueva empieza sonando
+    elif op in ("pausar", "reanudar"):
+        # FIJA el estado en vez de alternarlo (idempotente). Si dos personas
+        # presionan pausa a la vez, el log aplica "pausar" dos veces y el
+        # resultado sigue siendo "pausado". Un interruptor ("cambiar") lo
+        # aplicaría dos veces y la música seguiría sonando.
+        estado["pausado"] = op == "pausar"
+        res = estado["pausado"]
     else:
         raise ValueError(f"operación desconocida: {op}")
     estado["aplicadas"][rid] = res

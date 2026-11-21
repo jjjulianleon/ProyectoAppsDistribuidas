@@ -17,7 +17,17 @@ class TestSpec(unittest.TestCase):
         self.assertEqual(r, 0)
         s, r = spec.apply(s, "saltar", {"pos": 0})
         self.assertTrue(r)
-        self.assertEqual(spec.apply(s, "ver_cola", {})[1], {"cola": ["c1"], "actual": 1})
+        self.assertEqual(spec.apply(s, "ver_cola", {})[1], {"cola": ["c1"], "actual": 1, "pausado": False})
+
+    def test_pausar_coincide_con_cola(self):
+        s, r = spec.apply(None, "pausar", {})
+        self.assertTrue(r)
+        s, r = spec.apply(s, "pausar", {})
+        self.assertTrue(r)
+        self.assertTrue(spec.apply(s, "ver_cola", {})[1]["pausado"])
+        s, r = spec.apply(s, "reanudar", {})
+        self.assertFalse(r)
+        self.assertEqual(spec.key("pausar", {}), "cola")
 
     def test_claves(self):
         self.assertEqual(spec.key("like", {"cancion": "c1"}), "likes:c1")

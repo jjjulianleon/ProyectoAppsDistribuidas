@@ -120,7 +120,7 @@
   <div id="mini"></div>
   <div class="ctrl">
     <div class="botones">
-      <!-- Pausar es local del parlante: no cambia la cola, así que no pasa por las réplicas. -->
+      <!-- Pausar es parte del estado replicado: cualquier invitado pausa y el parlante obedece. -->
       <button id="pausa" hidden title="Pausar" aria-label="Pausar"></button>
       <button id="saltar" title="Saltar canción" aria-label="Saltar canción">⏭</button>
     </div>
@@ -140,7 +140,7 @@ const usuario = q.get("u") || (() => {
   return u;
 })();
 const $ = id => document.getElementById(id);
-let catalogo = {}, cola = [], actual = 0, likes = {}, misLikes = new Set(), sonando = null, activo = !PARLANTE;
+let catalogo = {}, cola = [], actual = 0, pausado = false, likes = {}, misLikes = new Set(), sonando = null, activo = !PARLANTE;
 
 const api = (op, args = {}) => fetch("/api/" + op, { method: "POST", body: JSON.stringify(args) })
   .then(r => r.json()).catch(() => ({ ok: false, error: "el gateway no responde" }));
@@ -224,7 +224,8 @@ function pintar() {
       <button class="like ${misLikes.has(id) ? "mio" : ""}" data-like="${esc(id)}" aria-label="Me gusta">♥ ${likes[id] || 0}</button></div>`;
   }).join("") : `<p class="vacio">Nada en cola. Usa + en la biblioteca.</p>`);
   $("empezar").hidden = !(PARLANTE && !activo);
-  $("pausa").hidden = !(PARLANTE && activo);
+  $("pausa").hidden = !s || (PARLANTE && !activo);
+  iconoPausa();
 }
 
 function reproducir() {
@@ -234,7 +235,29 @@ function reproducir() {
   if (clave === sonando) return;
   sonando = clave;
   if (!s) { a.pause(); a.removeAttribute("src"); return; }
-  a.src = s.archivo; a.play().catch(() => toast("El navegador bloqueó el audio: presiona Empezar a sonar", true));
+  a.src = s.archivo;
+  if (!pausado) a.play().catch(() => toast("El navegador bloqueó el audio: presiona Empezar a sonar", true));
+}
+
+function sincronizar() {
+  // El parlante obedece el estado replicado: si alguien pausó desde su
+  // teléfono, aquí se pausa (y al revés). No toca una canción que ya terminó:
+  // ese caso lo resuelve "saltar".
+  const a = $("audio");
+  if (!a.src || a.ended) return;
+  if (pausado && !a.paused) a.pause();
+  else if (!pausado && a.paused) a.play().catch(() => {});
+}
+
+async function pausarOReanudar() {
+  // Dos operaciones que FIJAN el estado, no un interruptor: si dos personas
+  // presionan pausa a la vez, las dos piden "pausar" y queda pausado.
+  const r = await api(pausado ? "reanudar" : "pausar");
+  if (!r.ok) return toast(`No se pudo ${pausado ? "reanudar" : "pausar"}: ${motivo(r.error)}`, true);
+  pausado = r.result;
+  toast(pausado ? "Pausada para todos" : "Sonando");
+  pintar();
+  if (PARLANTE && activo) sincronizar();
 }
 
 async function refrescar() {
@@ -243,11 +266,11 @@ async function refrescar() {
   // líder): si leyera una réplica atrasada, podría volver a tocar una canción
   // que ya terminó.
   const r = await api(PARLANTE ? "ver_cola" : "ver_cola_rapida");
-  if (r.ok) { cola = r.result.cola; actual = r.result.actual; }
+  if (r.ok) { cola = r.result.cola; actual = r.result.actual; pausado = r.result.pausado; }
   const ids = [...new Set(cola.slice(actual))];
   await Promise.all(ids.map(async id => { const l = await api("likes", { cancion: id }); if (l.ok) likes[id] = l.result; }));
   pintar();
-  if (PARLANTE && activo) reproducir();
+  if (PARLANTE && activo) { reproducir(); sincronizar(); }
 }
 
 async function replicas() {
@@ -266,21 +289,18 @@ document.addEventListener("click", e => {
   if (b.dataset.add) agregar(b.dataset.add);
   else if (b.dataset.like) like(b.dataset.like);
   else if (b.id === "saltar") saltar();
-  else if (b.id === "pausa") { const a = $("audio"); a.src && (a.paused ? a.play() : a.pause()); }
+  else if (b.id === "pausa") pausarOReanudar();
   else if (b.id === "empezar") { activo = true; sonando = null; refrescar(); }
 });
-// El ícono sigue al audio real: ⏸ mientras suena, ▶ en pausa.
+// El ícono sigue el estado replicado: ⏸ mientras suena, ▶ en pausa.
 const ICONO = {
   pausa: `<svg viewBox="0 0 16 16" aria-hidden="true"><rect x="3" y="2" width="3.5" height="12" rx="1" fill="currentColor"/><rect x="9.5" y="2" width="3.5" height="12" rx="1" fill="currentColor"/></svg>`,
   play: `<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 2.5v11l9.5-5.5z" fill="currentColor"/></svg>`,
 };
 function iconoPausa() {
-  const p = $("audio").paused;
-  $("pausa").innerHTML = p ? ICONO.play : ICONO.pausa;
-  $("pausa").title = $("pausa").ariaLabel = p ? "Reanudar" : "Pausar";
+  html("pausa", pausado ? ICONO.play : ICONO.pausa);
+  $("pausa").title = $("pausa").ariaLabel = pausado ? "Reanudar para todos" : "Pausar para todos";
 }
-["play", "pause", "emptied"].forEach(ev => $("audio").addEventListener(ev, iconoPausa));
-iconoPausa();
 $("audio").addEventListener("ended", saltar);  // al terminar, el parlante pide saltar (CAS: no hay doble salto)
 $("audio").addEventListener("timeupdate", () => {
   const a = $("audio"); $("t0").textContent = mmss(a.currentTime); $("t1").textContent = mmss(a.duration);
