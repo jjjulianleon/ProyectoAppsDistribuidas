@@ -1,0 +1,22 @@
+
+== partition n3 / n1 n2
+partition [['n3'], ['n1', 'n2']]
+líder del lado mayoritario: n1
+
+== agregar en n3 (lado minoritario): debe fallar
+-> {'ok': False, 'error': 'TimeoutError'}
+
+== agregar en n1 (lado mayoritario): debe funcionar
+-> {'ok': True, 'result': 1}
+
+== likes en los dos lados
+like en n3 -> ok
+like en n1 -> ok
+likes c1 en n3 -> 1
+
+== heal
+heal
+n1 likes c1 = 2
+n2 likes c1 = 2
+n3 likes c1 = 2
+ver_cola -> {'cola': ['c1', 'c3'], 'actual': 0}

@@ -1,0 +1,20 @@
+
+== agregar 4 canciones
+agregar c1 -> 0
+agregar c2 -> 1
+agregar c3 -> 2
+agregar c4 -> 3
+ver_cola -> {'cola': ['c1', 'c2', 'c3', 'c4'], 'actual': 0}
+
+== doble salto: dos clientes saltan pos=0 a la vez
+saltar -> {'c2': True, 'c3': False} (solo uno debe ser True)
+ver_cola -> {'cola': ['c1', 'c2', 'c3', 'c4'], 'actual': 1}
+
+== likes en réplicas distintas (ana repite)
+ver_cola_rapida -> {'cola': ['c1', 'c2', 'c3', 'c4'], 'actual': 1}
+likes c2 (puede estar atrasado) -> 2
+
+== esperar gossip y leer likes en cada réplica
+n1 likes c2 = 3
+n2 likes c2 = 3
+n3 likes c2 = 3

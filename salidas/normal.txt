@@ -1,0 +1,20 @@
+Historial: 14 operaciones (14 con respuesta ok), 3 lecturas finales
+
+Linearizability
+  objeto cola: 8 operaciones — cumple
+
+Convergencia
+  objeto likes:c2: converge — todas las réplicas = 3
+
+Líderes
+  un líder por periodo — cumple (periodo 1: n1)
+
+Costo
+  agregar: 4 ok, 0 sin respuesta, latencia p50 5 ms, p95 6 ms, mayor tiempo sin respuestas ok 0.0 s
+  like: 4 ok, 0 sin respuesta, latencia p50 1 ms, p95 1 ms, mayor tiempo sin respuestas ok 0.0 s
+  likes: 1 ok, 0 sin respuesta, latencia p50 1 ms, p95 1 ms, mayor tiempo sin respuestas ok 0.0 s
+  saltar: 2 ok, 0 sin respuesta, latencia p50 5 ms, p95 5 ms, mayor tiempo sin respuestas ok 0.0 s
+  ver_cola: 2 ok, 0 sin respuesta, latencia p50 4 ms, p95 4 ms, mayor tiempo sin respuestas ok 0.0 s
+  ver_cola_rapida: 1 ok, 0 sin respuesta, latencia p50 1 ms, p95 1 ms, mayor tiempo sin respuestas ok 0.0 s
+
+Resultado: sin violaciones

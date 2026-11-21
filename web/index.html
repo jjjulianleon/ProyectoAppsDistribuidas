@@ -1,0 +1,244 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>JamQ</title>
+<style>
+  :root {
+    --bg: #121212; --panel: #181818; --hover: #282828; --line: #2a2a2a;
+    --text: #ffffff; --muted: #b3b3b3; --dim: #727272;
+    --green: #1ed760; --red: #f15e6c; --amber: #f5a524;
+    --r: 8px;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, Roboto, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: #000; color: var(--text); height: 100vh; display: grid;
+         grid-template-rows: 1fr auto; gap: 8px; padding: 8px; overflow: hidden; }
+  main { display: grid; grid-template-columns: 300px 1fr 340px; gap: 8px; min-height: 0; }
+  section { background: var(--panel); border-radius: var(--r); padding: 16px; overflow: auto; min-height: 0; }
+  h1 { font-size: 22px; margin: 0 0 4px; letter-spacing: -0.5px; }
+  h1 b { color: var(--green); }
+  h2 { font-size: 16px; margin: 0 0 12px; }
+  .sub { color: var(--muted); font-size: 13px; margin: 0 0 16px; }
+  .row { display: grid; grid-template-columns: 44px 1fr auto; gap: 12px; align-items: center;
+         padding: 6px; border-radius: 6px; }
+  .row:hover { background: var(--hover); }
+  .row.on { background: #1f2f24; }
+  .row > div:not(.tile) { min-width: 0; } /* deja que el texto largo se corte con … */
+  .tile { width: 44px; height: 44px; border-radius: 4px; display: grid; place-items: center;
+          font-weight: 800; font-size: 15px; color: #fff; }
+  .t { font-size: 15px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .a { font-size: 13px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  button { font: inherit; color: var(--text); background: none; border: 0; cursor: pointer; border-radius: 999px; }
+  button:focus-visible { outline: 2px solid var(--green); outline-offset: 2px; }
+  .add { width: 32px; height: 32px; border: 1px solid var(--dim); color: var(--muted); font-size: 18px; }
+  .add:hover { border-color: var(--text); color: var(--text); transform: scale(1.06); }
+  .like { color: var(--muted); font-size: 14px; padding: 4px 8px; }
+  .like.mio { color: var(--green); }
+  .like:hover { color: var(--text); }
+  #ahora { display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center;
+           background: linear-gradient(180deg, var(--c, #333) 0%, var(--panel) 70%); transition: background .6s; }
+  #portada { width: min(300px, 60%); aspect-ratio: 1; border-radius: var(--r); display: grid; place-items: center;
+             font-size: 72px; font-weight: 900; box-shadow: 0 8px 40px rgba(0,0,0,.6); margin-bottom: 24px; }
+  #titulo { font-size: 32px; font-weight: 800; letter-spacing: -1px; margin: 0; }
+  #artista { color: var(--muted); margin: 6px 0 0; }
+  .vacio { color: var(--muted); font-size: 14px; padding: 8px 6px; }
+  .n { color: var(--dim); font-size: 13px; width: 18px; text-align: right; }
+  .cola .row { grid-template-columns: 18px 44px 1fr auto; }
+  footer { background: var(--bg); border-radius: var(--r); padding: 12px 16px; display: grid;
+           grid-template-columns: 1fr auto 1fr; align-items: center; gap: 16px; }
+  #mini { display: flex; gap: 12px; align-items: center; min-width: 0; }
+  #mini .tile { flex: none; }
+  .ctrl { display: flex; flex-direction: column; align-items: center; gap: 6px; }
+  #saltar { width: 40px; height: 40px; background: var(--text); color: #000; font-size: 16px; }
+  #saltar:hover { transform: scale(1.06); }
+  .barra { display: flex; align-items: center; gap: 8px; font-size: 11px; color: var(--muted); width: 340px; }
+  .barra div { flex: 1; height: 4px; background: #4d4d4d; border-radius: 2px; overflow: hidden; }
+  .barra i { display: block; height: 100%; width: 0; background: var(--text); }
+  /* Tira de réplicas: lo distinto de esta app. Cada réplica muestra su rol y periodo. */
+  #replicas { display: flex; gap: 8px; justify-content: flex-end; }
+  .rep { font: 600 12px ui-monospace, SFMono-Regular, Menlo, monospace; padding: 6px 10px; border-radius: 6px;
+         background: var(--hover); color: var(--muted); display: flex; gap: 6px; align-items: center; }
+  .rep::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--dim); }
+  .rep.follower::before { background: var(--muted); }
+  .rep.candidate::before { background: var(--amber); }
+  .rep.leader { color: #000; background: var(--green); }
+  .rep.leader::before { background: #000; }
+  .rep.caida { color: var(--red); background: #2a1215; text-decoration: line-through; }
+  .rep.caida::before { background: var(--red); }
+  #toast { position: fixed; bottom: 96px; left: 50%; transform: translateX(-50%) translateY(20px); opacity: 0;
+           background: var(--text); color: #000; padding: 10px 16px; border-radius: var(--r); font-size: 14px;
+           transition: .25s; pointer-events: none; max-width: 90vw; }
+  #toast.show { opacity: 1; transform: translateX(-50%); }
+  #toast.err { background: var(--red); color: #fff; }
+  #empezar { margin-top: 24px; background: var(--green); color: #000; font-weight: 700; padding: 14px 32px; font-size: 16px; }
+  .chip { display: inline-block; font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase;
+          color: var(--green); margin-bottom: 12px; }
+  @media (max-width: 900px) {
+    body { height: auto; overflow: auto; }
+    main { grid-template-columns: 1fr; }
+    #ahora { min-height: 360px; }
+    footer { grid-template-columns: 1fr; }
+    #replicas { justify-content: flex-start; flex-wrap: wrap; }
+    .barra { width: 100%; }
+  }
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+</head>
+<body>
+<main>
+  <section>
+    <h1>Jam<b>Q</b></h1>
+    <p class="sub" id="yo"></p>
+    <h2>Biblioteca</h2>
+    <div id="biblioteca"></div>
+  </section>
+  <section id="ahora">
+    <span class="chip" id="modo"></span>
+    <div id="portada"></div>
+    <p id="titulo">La cola está vacía</p>
+    <p id="artista">Agrega una canción desde la biblioteca</p>
+    <button id="empezar" hidden>Empezar a sonar</button>
+  </section>
+  <section class="cola">
+    <h2>Cola</h2>
+    <div id="cola"></div>
+  </section>
+</main>
+<footer>
+  <div id="mini"></div>
+  <div class="ctrl">
+    <button id="saltar" title="Saltar canción" aria-label="Saltar canción">⏭</button>
+    <div class="barra"><span id="t0">0:00</span><div><i id="prog"></i></div><span id="t1">—</span></div>
+  </div>
+  <div id="replicas" aria-label="Estado de las réplicas"></div>
+</footer>
+<div id="toast" role="status"></div>
+<audio id="audio"></audio>
+
+<script>
+const q = new URLSearchParams(location.search);
+const PARLANTE = q.has("parlante");
+const usuario = q.get("u") || (() => {
+  let u; try { u = localStorage.getItem("jamq-u"); } catch {}
+  if (!u) { u = "oyente-" + Math.random().toString(36).slice(2, 6); try { localStorage.setItem("jamq-u", u); } catch {} }
+  return u;
+})();
+const $ = id => document.getElementById(id);
+let catalogo = {}, cola = [], actual = 0, likes = {}, misLikes = new Set(), sonando = null, activo = !PARLANTE;
+
+const api = (op, args = {}) => fetch("/api/" + op, { method: "POST", body: JSON.stringify(args) })
+  .then(r => r.json()).catch(() => ({ ok: false, error: "el gateway no responde" }));
+
+function toast(msg, err) {
+  const t = $("toast"); t.textContent = msg; t.className = "show" + (err ? " err" : "");
+  clearTimeout(toast.h); toast.h = setTimeout(() => t.className = "", 2600);
+}
+const ini = s => s.titulo.split(/\s+/).slice(0, 2).map(w => w[0]).join("").toUpperCase();
+const tile = s => `<div class="tile" style="background:${s.color}">${ini(s)}</div>`;
+const mmss = s => isFinite(s) ? `${Math.floor(s / 60)}:${String(Math.floor(s % 60)).padStart(2, "0")}` : "—";
+// Escapa todo lo que viene de las réplicas: cualquiera puede agregar una
+// "canción" con cualquier texto por la API.
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+
+async function agregar(id) {
+  const r = await api("agregar", { cancion: id });
+  r.ok ? toast(`Agregada: ${catalogo[id].titulo}`) : toast(`No se pudo agregar: ${r.error} (¿no hay mayoría?)`, true);
+  refrescar();
+}
+async function like(id) {
+  const r = await api("like", { cancion: id, usuario });
+  if (r.ok) { misLikes.add(id); likes[id] = Math.max(likes[id] || 0, 1); pintar(); }
+  else toast(`No se pudo dar like: ${r.error}`, true);
+}
+async function saltar() {
+  if (actual >= cola.length) return toast("No hay nada sonando");
+  const r = await api("saltar", { pos: actual });
+  if (!r.ok) toast(`No se pudo saltar: ${r.error} (¿no hay mayoría?)`, true);
+  else if (r.result === false) toast("Otra persona ya la saltó");
+  else toast("Saltada");
+  refrescar();
+}
+
+// Solo reemplaza el HTML si cambió: así los botones no se recrean cada
+// segundo y un clic o el foco del teclado no se pierden.
+function html(id, h) { if ($(id).innerHTML !== h) $(id).innerHTML = h; }
+
+function pintarBiblioteca() {
+  $("yo").textContent = `Escuchas como ${usuario}`;
+  $("modo").textContent = PARLANTE ? "Parlante · suena aquí" : "Control · suena en el parlante";
+  $("biblioteca").innerHTML = Object.values(catalogo).map(s => `
+    <div class="row">${tile(s)}<div><div class="t">${esc(s.titulo)}</div><div class="a">${esc(s.artista)}</div></div>
+    <button class="add" data-add="${s.id}" aria-label="Agregar ${esc(s.titulo)} a la cola">+</button></div>`).join("");
+}
+
+function pintar() {
+  const s = catalogo[cola[actual]];
+  $("ahora").style.setProperty("--c", s ? s.color : "#333");
+  $("portada").style.background = s ? s.color : "var(--hover)";
+  $("portada").textContent = s ? ini(s) : "♪";
+  $("titulo").textContent = s ? s.titulo : "La cola está vacía";
+  $("artista").textContent = s ? s.artista : "Agrega una canción desde la biblioteca";
+  html("mini", s ? `${tile(s)}<div style="min-width:0"><div class="t">${esc(s.titulo)}</div><div class="a">${esc(s.artista)}</div></div>` : "");
+  const filas = cola.map((id, i) => [id, i]).slice(actual);
+  html("cola", filas.length ? filas.map(([id, i]) => {
+    const c = catalogo[id] || { titulo: id, artista: "", color: "#444" };
+    return `<div class="row ${i === actual ? "on" : ""}"><span class="n">${i === actual ? "▶" : i + 1}</span>${tile(c)}
+      <div><div class="t">${esc(c.titulo)}</div><div class="a">${esc(c.artista)}</div></div>
+      <button class="like ${misLikes.has(id) ? "mio" : ""}" data-like="${esc(id)}" aria-label="Me gusta">♥ ${likes[id] || 0}</button></div>`;
+  }).join("") : `<p class="vacio">Nada en cola. Usa + en la biblioteca.</p>`);
+  $("empezar").hidden = !(PARLANTE && !activo);
+}
+
+function reproducir() {
+  // Solo el parlante suena. Cambia de canción cuando cambia la posición actual.
+  const s = catalogo[cola[actual]], a = $("audio");
+  const clave = s ? `${actual}:${s.id}` : null;
+  if (clave === sonando) return;
+  sonando = clave;
+  if (!s) { a.pause(); a.removeAttribute("src"); return; }
+  a.src = s.archivo; a.play().catch(() => toast("El navegador bloqueó el audio: presiona Empezar a sonar", true));
+}
+
+async function refrescar() {
+  // Los controles leen con ver_cola_rapida (eventual: cualquier réplica, puede
+  // estar atrasada). El parlante usa ver_cola (linearizable, pasa por el
+  // líder): si leyera una réplica atrasada, podría volver a tocar una canción
+  // que ya terminó.
+  const r = await api(PARLANTE ? "ver_cola" : "ver_cola_rapida");
+  if (r.ok) { cola = r.result.cola; actual = r.result.actual; }
+  const ids = [...new Set(cola.slice(actual))];
+  await Promise.all(ids.map(async id => { const l = await api("likes", { cancion: id }); if (l.ok) likes[id] = l.result; }));
+  pintar();
+  if (PARLANTE && activo) reproducir();
+}
+
+async function replicas() {
+  const s = await fetch("/api/status").then(r => r.json()).catch(() => ({}));
+  html("replicas", Object.entries(s).map(([n, st]) => !st
+    ? `<span class="rep caida" title="no responde">${n}</span>`
+    : `<span class="rep ${st.role}" title="${st.role}, periodo ${st.term}">${n}${st.role === "leader" ? " · líder" : ""} · p${st.term}</span>`
+  ).join("") || `<span class="rep caida">sin cluster</span>`);
+}
+
+document.addEventListener("click", e => {
+  const b = e.target.closest("button"); if (!b) return;
+  if (b.dataset.add) agregar(b.dataset.add);
+  else if (b.dataset.like) like(b.dataset.like);
+  else if (b.id === "saltar") saltar();
+  else if (b.id === "empezar") { activo = true; sonando = null; refrescar(); }
+});
+$("audio").addEventListener("ended", saltar);  // al terminar, el parlante pide saltar (CAS: no hay doble salto)
+$("audio").addEventListener("timeupdate", () => {
+  const a = $("audio"); $("t0").textContent = mmss(a.currentTime); $("t1").textContent = mmss(a.duration);
+  $("prog").style.width = (a.duration ? 100 * a.currentTime / a.duration : 0) + "%";
+});
+
+fetch("catalogo.json").then(r => r.json()).then(c => {
+  c.forEach(s => catalogo[s.id] = s); pintarBiblioteca(); pintar(); refrescar(); replicas();
+  setInterval(refrescar, 1000); setInterval(replicas, 2000);
+});
+</script>
+</body>
+</html>

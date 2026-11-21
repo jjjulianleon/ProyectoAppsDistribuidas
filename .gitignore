@@ -1,0 +1,6 @@
+run/
+__pycache__/
+.DS_Store
+# Música y portadas de terceros: se usan solo en la demo local, no se publican.
+web/musica/*.mp3
+web/portadas/

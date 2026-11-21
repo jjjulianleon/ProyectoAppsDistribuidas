@@ -1,0 +1,16 @@
+Historial: 19 operaciones (19 con respuesta ok), 0 lecturas finales
+
+Linearizability
+  objeto cola: 19 operaciones — cumple
+
+Convergencia
+  (ninguna operación eventual)
+
+Líderes
+  un líder por periodo — cumple (periodo 1: n2, periodo 2: n3)
+
+Costo
+  agregar: 18 ok, 0 sin respuesta, latencia p50 11 ms, p95 1465 ms, mayor tiempo sin respuestas ok 1.8 s
+  ver_cola: 1 ok, 0 sin respuesta, latencia p50 10 ms, p95 10 ms, mayor tiempo sin respuestas ok 0.0 s
+
+Resultado: sin violaciones

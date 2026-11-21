@@ -1,0 +1,15 @@
+Historial: 1 operaciones (1 con respuesta ok), 3 lecturas finales
+
+Linearizability
+  (ninguna operación linearizable)
+
+Convergencia
+  objeto likes:c9: NO CONVERGE — todas dan 0, pero eso no sale de las escrituras del historial
+
+Líderes
+  un líder por periodo — cumple (periodo 1: n2)
+
+Costo
+  like: 1 ok, 0 sin respuesta, latencia p50 4 ms, p95 4 ms, mayor tiempo sin respuestas ok 0.0 s
+
+Resultado: VIOLACIÓN

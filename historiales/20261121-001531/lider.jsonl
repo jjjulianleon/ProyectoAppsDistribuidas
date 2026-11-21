@@ -1,0 +1,19 @@
+{"id": "c1-9b1aff23", "client": "c1", "op": "agregar", "args": {"cancion": "c1-0"}, "invoke": 1795238126.098392, "complete": 1795238126.108246, "ok": true, "result": 0, "error": null, "node": "n2"}
+{"id": "c2-7f7ab3e3", "client": "c2", "op": "agregar", "args": {"cancion": "c2-0"}, "invoke": 1795238126.098099, "complete": 1795238126.111237, "ok": true, "result": 1, "error": null, "node": "n2"}
+{"id": "c3-03d4a5e5", "client": "c3", "op": "agregar", "args": {"cancion": "c3-0"}, "invoke": 1795238126.0986829, "complete": 1795238126.1127522, "ok": true, "result": 2, "error": null, "node": "n2"}
+{"id": "c1-4962cbc9", "client": "c1", "op": "agregar", "args": {"cancion": "c1-1"}, "invoke": 1795238126.413739, "complete": 1795238126.421315, "ok": true, "result": 3, "error": null, "node": "n2"}
+{"id": "c2-0454aba3", "client": "c2", "op": "agregar", "args": {"cancion": "c2-1"}, "invoke": 1795238126.416519, "complete": 1795238126.424065, "ok": true, "result": 4, "error": null, "node": "n2"}
+{"id": "c3-a8146595", "client": "c3", "op": "agregar", "args": {"cancion": "c3-1"}, "invoke": 1795238126.4180071, "complete": 1795238126.428545, "ok": true, "result": 5, "error": null, "node": "n2"}
+{"id": "c1-5f1dca64", "client": "c1", "op": "agregar", "args": {"cancion": "c1-2"}, "invoke": 1795238126.725905, "complete": 1795238126.733243, "ok": true, "result": 6, "error": null, "node": "n2"}
+{"id": "c2-c52ab861", "client": "c2", "op": "agregar", "args": {"cancion": "c2-2"}, "invoke": 1795238126.729307, "complete": 1795238126.7342038, "ok": true, "result": 7, "error": null, "node": "n2"}
+{"id": "c3-fa1f5492", "client": "c3", "op": "agregar", "args": {"cancion": "c3-2"}, "invoke": 1795238126.7330801, "complete": 1795238126.7373152, "ok": true, "result": 8, "error": null, "node": "n2"}
+{"id": "c2-91614453", "client": "c2", "op": "agregar", "args": {"cancion": "c2-3"}, "invoke": 1795238127.038645, "complete": 1795238127.051771, "ok": true, "result": 9, "error": null, "node": "n2"}
+{"id": "c1-ff57a06f", "client": "c1", "op": "agregar", "args": {"cancion": "c1-3"}, "invoke": 1795238127.0394628, "complete": 1795238127.052947, "ok": true, "result": 10, "error": null, "node": "n2"}
+{"id": "c3-da17368b", "client": "c3", "op": "agregar", "args": {"cancion": "c3-3"}, "invoke": 1795238127.042592, "complete": 1795238127.054637, "ok": true, "result": 11, "error": null, "node": "n2"}
+{"id": "c2-ab5ba793", "client": "c2", "op": "agregar", "args": {"cancion": "c2-4"}, "invoke": 1795238127.358001, "complete": 1795238127.364806, "ok": true, "result": 12, "error": null, "node": "n2"}
+{"id": "c1-bf110b35", "client": "c1", "op": "agregar", "args": {"cancion": "c1-4"}, "invoke": 1795238127.359138, "complete": 1795238127.367337, "ok": true, "result": 13, "error": null, "node": "n2"}
+{"id": "c3-6d1d5c61", "client": "c3", "op": "agregar", "args": {"cancion": "c3-4"}, "invoke": 1795238127.359872, "complete": 1795238127.36927, "ok": true, "result": 14, "error": null, "node": "n2"}
+{"id": "c2-eaa5c01d", "client": "c2", "op": "agregar", "args": {"cancion": "c2-5"}, "invoke": 1795238127.665257, "complete": 1795238129.1300852, "ok": true, "result": 15, "error": null, "node": "n3"}
+{"id": "c1-2b0d61bc", "client": "c1", "op": "agregar", "args": {"cancion": "c1-5"}, "invoke": 1795238127.672394, "complete": 1795238129.1312158, "ok": true, "result": 16, "error": null, "node": "n3"}
+{"id": "c3-44404af5", "client": "c3", "op": "agregar", "args": {"cancion": "c3-5"}, "invoke": 1795238127.674509, "complete": 1795238129.13202, "ok": true, "result": 17, "error": null, "node": "n3"}
+{"id": "c1-21351b42", "client": "c1", "op": "ver_cola", "args": {}, "invoke": 1795238131.770088, "complete": 1795238131.780152, "ok": true, "result": {"cola": ["c1-0", "c2-0", "c3-0", "c1-1", "c2-1", "c3-1", "c1-2", "c2-2", "c3-2", "c2-3", "c1-3", "c3-3", "c2-4", "c1-4", "c3-4", "c2-5", "c1-5", "c3-5"], "actual": 0}, "error": null, "node": "n3"}

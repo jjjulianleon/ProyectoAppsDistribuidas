@@ -1,0 +1,13 @@
+
+== partition n3 / n1 n2
+partition [['n3'], ['n1', 'n2']]
+like en n3 -> ok
+
+== kill n3 antes del gossip, heal y start n3 --empty
+kill n3
+heal
+start n3 (sin estado)
+n1 likes c9 = 0
+n2 likes c9 = 0
+n3 likes c9 = 0
+El like confirmado se perdió: estaba solo en el disco de n3.
