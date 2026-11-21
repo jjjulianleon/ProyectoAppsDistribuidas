@@ -64,9 +64,10 @@ python3 cluster.py down        # guarda el historial en historiales/FECHA-HORA/
 ## Demo con el front
 
 ```sh
-python3 cluster.py up --local
-python3 gateway.py
+bash demo.sh        # = python3 cluster.py up --local + python3 gateway.py
 ```
+
+Si la página dice "las réplicas no están corriendo", falta `python3 cluster.py up --local`.
 
 - `http://localhost:8080/?parlante=1&u=dj`: el parlante. Presiona "Empezar a
   sonar"; cuando termina una canción, pide saltar.

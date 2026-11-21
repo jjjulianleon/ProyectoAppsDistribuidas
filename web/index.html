@@ -32,7 +32,11 @@
   .a { font-size: 13px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   button { font: inherit; color: var(--text); background: none; border: 0; cursor: pointer; border-radius: 999px; }
   button:focus-visible { outline: 2px solid var(--green); outline-offset: 2px; }
-  .add { width: 32px; height: 32px; border: 1px solid var(--dim); color: var(--muted); font-size: 18px; }
+  /* El "+" es un SVG y no un carácter: un carácter de texto nunca queda
+     centrado exacto (depende de la fuente). Con grid queda al centro. */
+  .add { width: 32px; height: 32px; border: 1px solid var(--dim); color: var(--muted); padding: 0;
+         display: grid; place-items: center; }
+  .add svg { width: 14px; height: 14px; }
   .add:hover { border-color: var(--text); color: var(--text); transform: scale(1.06); }
   .like { color: var(--muted); font-size: 14px; padding: 4px 8px; }
   .like.mio { color: var(--green); }
@@ -142,20 +146,27 @@ const mmss = s => isFinite(s) ? `${Math.floor(s / 60)}:${String(Math.floor(s % 6
 // "canción" con cualquier texto por la API.
 const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
 
+// Traduce el error a lo que la persona puede hacer.
+function motivo(e = "") {
+  if (/cluster/.test(e)) return "las réplicas no están corriendo (python3 cluster.py up --local)";
+  if (/gateway/.test(e)) return "el gateway no responde (python3 gateway.py)";
+  if (/líder|Timeout|timeout|respuesta/.test(e)) return "no hay mayoría de réplicas, reintenta en unos segundos";
+  return e;
+}
 async function agregar(id) {
   const r = await api("agregar", { cancion: id });
-  r.ok ? toast(`Agregada: ${catalogo[id].titulo}`) : toast(`No se pudo agregar: ${r.error} (¿no hay mayoría?)`, true);
+  r.ok ? toast(`Agregada: ${catalogo[id].titulo}`) : toast(`No se pudo agregar: ${motivo(r.error)}`, true);
   refrescar();
 }
 async function like(id) {
   const r = await api("like", { cancion: id, usuario });
   if (r.ok) { misLikes.add(id); likes[id] = Math.max(likes[id] || 0, 1); pintar(); }
-  else toast(`No se pudo dar like: ${r.error}`, true);
+  else toast(`No se pudo dar like: ${motivo(r.error)}`, true);
 }
 async function saltar() {
   if (actual >= cola.length) return toast("No hay nada sonando");
   const r = await api("saltar", { pos: actual });
-  if (!r.ok) toast(`No se pudo saltar: ${r.error} (¿no hay mayoría?)`, true);
+  if (!r.ok) toast(`No se pudo saltar: ${motivo(r.error)}`, true);
   else if (r.result === false) toast("Otra persona ya la saltó");
   else toast("Saltada");
   refrescar();
@@ -170,7 +181,7 @@ function pintarBiblioteca() {
   $("modo").textContent = PARLANTE ? "Parlante · suena aquí" : "Control · suena en el parlante";
   $("biblioteca").innerHTML = Object.values(catalogo).map(s => `
     <div class="row">${tile(s)}<div><div class="t">${esc(s.titulo)}</div><div class="a">${esc(s.artista)}</div></div>
-    <button class="add" data-add="${s.id}" aria-label="Agregar ${esc(s.titulo)} a la cola">+</button></div>`).join("");
+    <button class="add" data-add="${s.id}" aria-label="Agregar ${esc(s.titulo)} a la cola"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 1v14M1 8h14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button></div>`).join("");
 }
 
 function pintar() {
@@ -215,12 +226,15 @@ async function refrescar() {
 }
 
 async function replicas() {
-  const s = await fetch("/api/status").then(r => r.json()).catch(() => ({}));
+  // Si el gateway responde con error (no hay cluster) o no responde, no hay
+  // réplicas que mostrar: se ve "réplicas apagadas" en vez de un nodo falso.
+  const s = await fetch("/api/status").then(r => r.ok ? r.json() : {}).catch(() => ({}));
   html("replicas", Object.entries(s).map(([n, st]) => !st
     ? `<span class="rep caida" title="no responde">${n}</span>`
     : `<span class="rep ${st.role}" title="${st.role}, periodo ${st.term}">${n}${st.role === "leader" ? " · líder" : ""} · p${st.term}</span>`
-  ).join("") || `<span class="rep caida">sin cluster</span>`);
+  ).join("") || `<span class="rep caida" title="python3 cluster.py up --local">réplicas apagadas</span>`);
 }
+
 
 document.addEventListener("click", e => {
   const b = e.target.closest("button"); if (!b) return;
