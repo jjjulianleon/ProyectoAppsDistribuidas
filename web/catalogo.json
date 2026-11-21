@@ -4,48 +4,55 @@
     "titulo": "Hotline Bling",
     "artista": "Drake",
     "archivo": "musica/c1.mp3",
-    "color": "#1e3264"
+    "color": "#1e3264",
+    "portada": "portadas/c1.jpg"
   },
   {
     "id": "c2",
     "titulo": "BbY WOW",
     "artista": "KAROL G, Judeline, rusowsky",
     "archivo": "musica/c2.mp3",
-    "color": "#e8115b"
+    "color": "#e8115b",
+    "portada": "portadas/c2.jpg"
   },
   {
     "id": "c3",
     "titulo": "Weird Fishes",
     "artista": "Radiohead",
     "archivo": "musica/c3.mp3",
-    "color": "#148a08"
+    "color": "#148a08",
+    "portada": "portadas/c3.jpg"
   },
   {
     "id": "c4",
     "titulo": "Luv(sic.) pt3",
     "artista": "Nujabes",
     "archivo": "musica/c4.mp3",
-    "color": "#8d67ab"
+    "color": "#8d67ab",
+    "portada": "portadas/c4.jpg"
   },
   {
     "id": "c5",
     "titulo": "Under The Weather",
     "artista": "Mac Miller",
     "archivo": "musica/c5.mp3",
-    "color": "#477d95"
+    "color": "#477d95",
+    "portada": "portadas/c5.jpg"
   },
   {
     "id": "c6",
     "titulo": "SUPERESTRELLA",
     "artista": "Aitana",
     "archivo": "musica/c6.mp3",
-    "color": "#dc148c"
+    "color": "#dc148c",
+    "portada": "portadas/c6.jpg"
   },
   {
     "id": "c7",
     "titulo": "Corintios 13:12",
     "artista": "Cruz Cafuné ft. Westside Gunn",
     "archivo": "musica/c7.mp3",
-    "color": "#ba5d07"
+    "color": "#ba5d07",
+    "portada": "portadas/c7.jpg"
   }
 ]

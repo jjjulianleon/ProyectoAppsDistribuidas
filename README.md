@@ -81,3 +81,7 @@ Todo lo que se hace en la página queda en `run/web.jsonl`:
 La música no viene en el zip: pon 7 MP3 en `web/musica/` llamados `c1.mp3` …
 `c7.mp3` (ver `web/musica/LEEME.md`). Sin MP3 todo funciona igual, solo que
 no suena.
+
+Las portadas tampoco vienen (son de terceros). Para bajarlas (necesita internet):
+`python3 web/bajar_portadas.py`. Sin portadas, cada canción se ve con su color
+e iniciales.
