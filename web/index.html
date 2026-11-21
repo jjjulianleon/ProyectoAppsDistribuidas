@@ -57,8 +57,12 @@
   #mini { display: flex; gap: 12px; align-items: center; min-width: 0; }
   #mini .tile { flex: none; }
   .ctrl { display: flex; flex-direction: column; align-items: center; gap: 6px; }
-  #saltar { width: 40px; height: 40px; background: var(--text); color: #000; font-size: 16px; }
-  #saltar:hover { transform: scale(1.06); }
+  .botones { display: flex; gap: 12px; align-items: center; }
+  #saltar, #pausa { width: 40px; height: 40px; background: var(--text); color: #000; font-size: 16px;
+                    display: grid; place-items: center; padding: 0; }
+  #saltar:hover, #pausa:hover { transform: scale(1.06); }
+  #pausa svg { width: 16px; height: 16px; }
+  [hidden] { display: none !important; } /* que display:grid no le gane a hidden */
   .barra { display: flex; align-items: center; gap: 8px; font-size: 11px; color: var(--muted); width: 340px; }
   .barra div { flex: 1; height: 4px; background: #4d4d4d; border-radius: 2px; overflow: hidden; }
   .barra i { display: block; height: 100%; width: 0; background: var(--text); }
@@ -115,7 +119,11 @@
 <footer>
   <div id="mini"></div>
   <div class="ctrl">
-    <button id="saltar" title="Saltar canción" aria-label="Saltar canción">⏭</button>
+    <div class="botones">
+      <!-- Pausar es local del parlante: no cambia la cola, así que no pasa por las réplicas. -->
+      <button id="pausa" hidden title="Pausar" aria-label="Pausar"></button>
+      <button id="saltar" title="Saltar canción" aria-label="Saltar canción">⏭</button>
+    </div>
     <div class="barra"><span id="t0">0:00</span><div><i id="prog"></i></div><span id="t1">—</span></div>
   </div>
   <div id="replicas" aria-label="Estado de las réplicas"></div>
@@ -216,6 +224,7 @@ function pintar() {
       <button class="like ${misLikes.has(id) ? "mio" : ""}" data-like="${esc(id)}" aria-label="Me gusta">♥ ${likes[id] || 0}</button></div>`;
   }).join("") : `<p class="vacio">Nada en cola. Usa + en la biblioteca.</p>`);
   $("empezar").hidden = !(PARLANTE && !activo);
+  $("pausa").hidden = !(PARLANTE && activo);
 }
 
 function reproducir() {
@@ -257,8 +266,21 @@ document.addEventListener("click", e => {
   if (b.dataset.add) agregar(b.dataset.add);
   else if (b.dataset.like) like(b.dataset.like);
   else if (b.id === "saltar") saltar();
+  else if (b.id === "pausa") { const a = $("audio"); a.src && (a.paused ? a.play() : a.pause()); }
   else if (b.id === "empezar") { activo = true; sonando = null; refrescar(); }
 });
+// El ícono sigue al audio real: ⏸ mientras suena, ▶ en pausa.
+const ICONO = {
+  pausa: `<svg viewBox="0 0 16 16" aria-hidden="true"><rect x="3" y="2" width="3.5" height="12" rx="1" fill="currentColor"/><rect x="9.5" y="2" width="3.5" height="12" rx="1" fill="currentColor"/></svg>`,
+  play: `<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 2.5v11l9.5-5.5z" fill="currentColor"/></svg>`,
+};
+function iconoPausa() {
+  const p = $("audio").paused;
+  $("pausa").innerHTML = p ? ICONO.play : ICONO.pausa;
+  $("pausa").title = $("pausa").ariaLabel = p ? "Reanudar" : "Pausar";
+}
+["play", "pause", "emptied"].forEach(ev => $("audio").addEventListener(ev, iconoPausa));
+iconoPausa();
 $("audio").addEventListener("ended", saltar);  // al terminar, el parlante pide saltar (CAS: no hay doble salto)
 $("audio").addEventListener("timeupdate", () => {
   const a = $("audio"); $("t0").textContent = mmss(a.currentTime); $("t1").textContent = mmss(a.duration);
